@@ -7,6 +7,7 @@ namespace AG3962
     public class ShootingObject : MonoBehaviour
     {
         [SerializeField] private GameObject[] particles;
+        [SerializeField] private GameObject[] otherParticles;
         [SerializeField] private Transform objectTransform;
 
         void Start()
@@ -25,6 +26,12 @@ namespace AG3962
             {
                 GameObject someParticle = Instantiate(particle, objectTransform.transform.position + (Vector3.up * 2.0f), Quaternion.identity);
                 StartCoroutine(DestroyingParticles(someParticle));
+            }
+
+            foreach (var particle2 in otherParticles)
+            {
+                GameObject someParticle2 = Instantiate(particle2, objectTransform.transform.position + (Vector3.up * 2.0f), Quaternion.identity);
+                StartCoroutine(DestroyingParticles(someParticle2));
             }
         }
 
