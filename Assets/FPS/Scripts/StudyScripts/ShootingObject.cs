@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.FPS.Game;
+using UnityEngine.Events;
 using UnityEngine;
 
 namespace AG3962
@@ -9,6 +10,8 @@ namespace AG3962
         [SerializeField] private GameObject[] particles;
         [SerializeField] private GameObject[] otherParticles;
         [SerializeField] private Transform objectTransform;
+
+        public UnityEvent wayPointTrigger;
 
         void Start()
         {
@@ -22,16 +25,21 @@ namespace AG3962
 
         private void OnTriggerEnter(Collider other)
         {
-            foreach (var particle in particles)
+            if (other.GetComponent<ShootingObject>() != null)
             {
-                GameObject someParticle = Instantiate(particle, objectTransform.transform.position + (Vector3.up * 2.0f), Quaternion.identity);
-                StartCoroutine(DestroyingParticles(someParticle));
-            }
+                wayPointTrigger.Invoke();
 
-            foreach (var particle2 in otherParticles)
-            {
-                GameObject someParticle2 = Instantiate(particle2, objectTransform.transform.position + (Vector3.up * 2.0f), Quaternion.identity);
-                StartCoroutine(DestroyingParticles(someParticle2));
+                foreach (var particle in particles)
+                {
+                    GameObject someParticle = Instantiate(particle, objectTransform.transform.position + (Vector3.up * 2.0f), Quaternion.identity);
+                    StartCoroutine(DestroyingParticles(someParticle));
+                }
+
+                foreach (var particle2 in otherParticles)
+                {
+                    GameObject someParticle2 = Instantiate(particle2, objectTransform.transform.position + (Vector3.up * 2.0f), Quaternion.identity);
+                    StartCoroutine(DestroyingParticles(someParticle2));
+                }
             }
         }
 
